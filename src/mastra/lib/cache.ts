@@ -12,12 +12,17 @@ const cache = new Map<string, CacheEntry<unknown>>();
 
 /**
  * Cache TTL values in milliseconds
+ *
+ * Rationale:
+ * - Versioned docs (specific version): 24 hours - immutable once published
+ * - Latest version: 2 hours - changes when new version released
+ * - Search: 30 minutes - new crates published frequently
  */
 export const CACHE_TTL = {
-  CRATE_SEARCH: 5 * 60 * 1000, // 5 minutes - updates frequently
-  CRATE_OVERVIEW: 60 * 60 * 1000, // 1 hour - stable between releases
-  ITEM_DOCS: 60 * 60 * 1000, // 1 hour - stable between releases
-  MODULE_LISTING: 60 * 60 * 1000, // 1 hour - stable between releases
+  CRATE_SEARCH: 30 * 60 * 1000, // 30 minutes - new crates published
+  CRATE_OVERVIEW: 24 * 60 * 60 * 1000, // 24 hours - versioned docs are immutable
+  ITEM_DOCS: 24 * 60 * 60 * 1000, // 24 hours - versioned docs are immutable
+  MODULE_LISTING: 24 * 60 * 60 * 1000, // 24 hours - versioned docs are immutable
 } as const;
 
 /**

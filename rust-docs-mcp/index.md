@@ -2,7 +2,19 @@
 
 > A cloud-hosted MCP server providing AI assistants with comprehensive access to Rust documentation from docs.rs, accessible via HTTP without local installation.
 
-[Notes](./notes.md) | [TODOs](./todos.md)
+[Notes](./notes.md) | [TODOs](./todos.md) | [Analysis](./analysis.md) | [Implementation Summary](./IMPLEMENTATION_SUMMARY.md)
+
+---
+
+## 🎉 Recent Updates (Dec 6, 2024)
+
+**MCP Resources & Prompts Added!**
+
+The Rust Docs MCP has been enhanced with:
+- **9 Rust Pattern Resources**: Common async, error handling, ownership, and trait patterns
+- **6 Task Prompt Templates**: Guided workflows for implement-trait, add-async, error handling, and more
+
+See [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md) for details.
 
 ---
 
