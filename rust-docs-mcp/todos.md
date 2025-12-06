@@ -6,88 +6,88 @@
 
 ## Phase 1: Project Setup
 
-- [ ] Create new project directory
-- [ ] Initialize with `bun init`
-- [ ] Install dependencies:
-  - [ ] `@mastra/core`
-  - [ ] `@mastra/mcp`
-  - [ ] `zod`
-  - [ ] `cheerio`
-- [ ] Configure TypeScript
-- [ ] Create Mastra directory structure:
-  - [ ] `src/mastra/tools/`
-  - [ ] `src/mastra/lib/`
-  - [ ] `src/mastra/index.ts`
+- [x] Create new project directory
+- [x] Initialize with `bun init`
+- [x] Install dependencies:
+  - [x] `@mastra/core`
+  - [x] `@mastra/mcp`
+  - [x] `zod`
+  - [x] `cheerio`
+- [x] Configure TypeScript
+- [x] Create Mastra directory structure:
+  - [x] `src/mastra/tools/`
+  - [x] `src/mastra/lib/`
+  - [x] `src/mastra/index.ts`
 
 ## Phase 2: Library Implementation
 
 ### HTML Parsers (src/mastra/lib/parsers.ts)
 
-- [ ] Create `parseCrateOverview(html)` function
-  - [ ] Extract crate description
-  - [ ] Extract modules list
-  - [ ] Extract structs/enums/traits/functions/macros
+- [x] Create `parseCrateOverview(html)` function
+  - [x] Extract crate description
+  - [x] Extract modules list
+  - [x] Extract structs/enums/traits/functions/macros
   - [ ] Extract feature flags
-- [ ] Create `parseItemDocs(html, type)` function
-  - [ ] Extract item signature
-  - [ ] Extract description
-  - [ ] Extract methods (for structs/enums/traits)
-  - [ ] Extract variants (for enums)
-  - [ ] Extract examples
-- [ ] Create `parseModuleItems(html)` function
-  - [ ] Extract all item types and names
+- [x] Create `parseItemDocs(html, type)` function
+  - [x] Extract item signature
+  - [x] Extract description
+  - [x] Extract methods (for structs/enums/traits)
+  - [x] Extract variants (for enums)
+  - [x] Extract examples
+- [x] Create `parseModuleItems(html)` function
+  - [x] Extract all item types and names
 
 ### crates.io Client (src/mastra/lib/crates-io.ts)
 
-- [ ] Create `searchCrates(query, limit)` function
-- [ ] Parse API response into structured format
+- [x] Create `searchCrates(query, limit)` function
+- [x] Parse API response into structured format
 - [ ] Handle rate limiting
 
 ### Caching (src/mastra/lib/cache.ts)
 
-- [ ] Implement in-memory cache with TTL
-- [ ] Create `getCached(key, ttl, fetcher)` helper
+- [x] Implement in-memory cache with TTL
+- [x] Create `getCached(key, ttl, fetcher)` helper
 
 ## Phase 3: Tool Implementation
 
 ### src/mastra/tools/search-crates.ts
 
-- [ ] Create `searchCratesTool` with createTool
-- [ ] Implement input schema (query, limit)
-- [ ] Implement output schema (crates array)
-- [ ] Connect to crates-io client
+- [x] Create `searchCratesTool` with createTool
+- [x] Implement input schema (query, limit)
+- [x] Implement output schema (crates array)
+- [x] Connect to crates-io client
 
 ### src/mastra/tools/get-crate-overview.ts
 
-- [ ] Create `getCrateOverviewTool` with createTool
-- [ ] Implement input schema (crate, version)
-- [ ] Implement output schema (overview data)
-- [ ] Handle crate path transformation (- to \_)
-- [ ] Connect to parser
+- [x] Create `getCrateOverviewTool` with createTool
+- [x] Implement input schema (crate, version)
+- [x] Implement output schema (overview data)
+- [x] Handle crate path transformation (- to \_)
+- [x] Connect to parser
 
 ### src/mastra/tools/get-item-docs.ts
 
-- [ ] Create `getItemDocsTool` with createTool
-- [ ] Implement input schema (crate, item_type, item_name, module)
-- [ ] Implement output schema (item documentation)
-- [ ] Handle all item types (struct, enum, trait, fn, macro, type)
-- [ ] Connect to parser
+- [x] Create `getItemDocsTool` with createTool
+- [x] Implement input schema (crate, item_type, item_name, module)
+- [x] Implement output schema (item documentation)
+- [x] Handle all item types (struct, enum, trait, fn, macro, type)
+- [x] Connect to parser
 
 ### src/mastra/tools/list-modules.ts
 
-- [ ] Create `listModulesTool` with createTool
-- [ ] Implement input schema (crate, module)
-- [ ] Implement output schema (categorized items)
-- [ ] Connect to parser
+- [x] Create `listModulesTool` with createTool
+- [x] Implement input schema (crate, module)
+- [x] Implement output schema (categorized items)
+- [x] Connect to parser
 
 ## Phase 4: Mastra App Setup
 
 ### src/mastra/index.ts
 
-- [ ] Import all tools
-- [ ] Create MCPServer instance with all 4 tools
-- [ ] Create Mastra instance with MCPServer
-- [ ] Export mastra instance
+- [x] Import all tools
+- [x] Create MCPServer instance with all 4 tools
+- [x] Create Mastra instance with MCPServer
+- [x] Export mastra instance
 
 ## Phase 5: Local Testing
 
