@@ -11,18 +11,18 @@ import { MCPServer } from "@mastra/mcp";
 
 // Import all tools
 import { searchCratesTool } from "./tools/search-crates";
-import { getCrateOverviewTool } from "./tools/get-crate-overview";
-import { getItemDocsTool } from "./tools/get-item-docs";
-import { listModulesTool } from "./tools/list-modules";
+import { getCrateOverviewToolTurndown } from "./tools/get-crate-overview-turndown";
+import { getItemDocsToolTurndown } from "./tools/get-item-docs-turndown";
+import { listModulesToolTurndown } from "./tools/list-modules-turndown";
 
 /**
- * Create MCP Server with all 4 Rust documentation tools
+ * Create MCP Server with all 4 Rust documentation tools (Turndown version)
  *
  * Tools:
  * - search_crates: Search for crates on crates.io
- * - get_crate_overview: Get main documentation page for a crate
- * - get_item_docs: Get documentation for specific items (struct, enum, trait, etc.)
- * - list_modules: List all modules and items in a crate or module
+ * - get_crate_overview: Get main documentation page for a crate as Markdown
+ * - get_item_docs: Get documentation for specific items as Markdown
+ * - list_modules: List all modules and items in a crate or module as Markdown
  */
 const rustDocsMcpServer = new MCPServer({
   name: "rust-docs-mcp",
@@ -31,9 +31,9 @@ const rustDocsMcpServer = new MCPServer({
     "Cloud-hosted MCP server providing access to Rust crate documentation from docs.rs and crates.io",
   tools: {
     search_crates: searchCratesTool,
-    get_crate_overview: getCrateOverviewTool,
-    get_item_docs: getItemDocsTool,
-    list_modules: listModulesTool,
+    get_crate_overview: getCrateOverviewToolTurndown,
+    get_item_docs: getItemDocsToolTurndown,
+    list_modules: listModulesToolTurndown,
   },
 });
 

@@ -105,14 +105,23 @@ function extractItems($: cheerio.CheerioAPI, sectionId: string): string[] {
   const section = $(sectionId);
   if (!section.length) return [];
 
-  // Try the new item-table structure first
+  // Try the actual docs.rs structure: h2#modules + dl.item-table + dt a
   const items = section
     .next(".item-table")
-    .find(".item-name a")
+    .find("dt a")
     .map((_, el) => $(el).text().trim())
     .get();
 
   if (items.length > 0) return items;
+
+  // Try alternative structure: a.mod within item-table
+  const altItems = section
+    .next(".item-table")
+    .find("a.mod")
+    .map((_, el) => $(el).text().trim())
+    .get();
+
+  if (altItems.length > 0) return altItems;
 
   // Fallback to older structure
   return section
