@@ -130,14 +130,16 @@ Based on research of MCP best practices and Rust development patterns:
 
 #### 4. MCP Resources - Common Patterns (DEPRECATED)
 
-**Why:** Teach Rust patterns, not just docs — *but don't hardcode them.*
+**Why:** Teach Rust patterns, not just docs — _but don't hardcode them._
 **Current approach:** Static MCP Resources were removed and replaced by a dynamic-first approach using tools + prompts. If desired, resource templates (dynamic URI templates) can still be exposed as an optional, feature-gated interface.
 
 **Dynamic-first recommendation:**
+
 - Use `get_item_docs`, `get_crate_overview`, and `list_modules` to fetch patterns/examples directly from docs.rs
 - Prompts should orchestrate tool usage and provide step-by-step workflows for developers and agents
 
 **If resources are required in the future (optional)**:
+
 ```typescript
 {
    uri: "rust://patterns/async/spawning-tasks",

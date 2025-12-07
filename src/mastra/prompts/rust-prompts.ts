@@ -30,7 +30,8 @@ export const rustPrompts: Prompt[] = [
       },
       {
         name: "version",
-        description: "Optional crate version to use when querying documentation (default: 'latest')",
+        description:
+          "Optional crate version to use when querying documentation (default: 'latest')",
         required: false,
       },
     ],
@@ -51,7 +52,8 @@ export const rustPrompts: Prompt[] = [
       },
       {
         name: "version",
-        description: "Optional crate/runtime version to use when querying documentation (default: 'latest')",
+        description:
+          "Optional crate/runtime version to use when querying documentation (default: 'latest')",
         required: false,
       },
     ],
@@ -72,7 +74,8 @@ export const rustPrompts: Prompt[] = [
       },
       {
         name: "version",
-        description: "Optional crate version to use for documentation queries (default: 'latest')",
+        description:
+          "Optional crate version to use for documentation queries (default: 'latest')",
         required: false,
       },
     ],
@@ -93,7 +96,8 @@ export const rustPrompts: Prompt[] = [
       },
       {
         name: "version",
-        description: "Optional crate version if documentation should be a specific version",
+        description:
+          "Optional crate version if documentation should be a specific version",
         required: false,
       },
     ],
@@ -114,7 +118,8 @@ export const rustPrompts: Prompt[] = [
       },
       {
         name: "version",
-        description: "Optional crate version for documentation lookups useful during debugging",
+        description:
+          "Optional crate version for documentation lookups useful during debugging",
         required: false,
       },
     ],
@@ -135,7 +140,8 @@ export const rustPrompts: Prompt[] = [
       },
       {
         name: "version",
-        description: "Optional crate version used when consulting docs for performance patterns",
+        description:
+          "Optional crate version used when consulting docs for performance patterns",
         required: false,
       },
     ],

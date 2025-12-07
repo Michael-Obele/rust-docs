@@ -7,6 +7,7 @@
 ## ✅ COMPLETED: Core Implementation
 
 All core functionality is now complete! The MCP server is fully functional with:
+
 - 4 working tools (search_crates, get_crate_overview, get_item_docs, list_modules)
 - MCP Resources for common Rust patterns
 - MCP Prompts for guided Rust development tasks
@@ -18,13 +19,14 @@ All core functionality is now complete! The MCP server is fully functional with:
 These features will significantly improve the MCP's usefulness:
 
 ### 1. Code Examples Extraction
+
 **Status**: Not started  
 **Priority**: High  
 **Estimated effort**: Medium
 
 Enhance parsers to separately extract and categorize code examples:
 
-```typescript
+````typescript
 interface ItemDocs {
   // ... existing fields
   examples: CodeExample[]
@@ -58,14 +60,14 @@ interface CodeExample {
 ---
 
 ### 2. Better Error Messages
-**Status**: Not started  
-**Priority**: High  
+**Status**: Not started
+**Priority**: High
 **Estimated effort**: Small
 
 Improve get_item_docs error handling:
 
-**Current behavior**: Returns 404 or "item not found" for module path issues  
-**Desired behavior**: 
+**Current behavior**: Returns 404 or "item not found" for module path issues
+**Desired behavior**:
 - Detect when item is in a module (not root)
 - Suggest using list_modules to find correct path
 - Parse URL to suggest likely module location
@@ -79,8 +81,8 @@ Improve get_item_docs error handling:
 ---
 
 ### 3. Trait Implementation Extraction
-**Status**: Not started  
-**Priority**: Medium  
+**Status**: Not started
+**Priority**: Medium
 **Estimated effort**: Medium
 
 Extract trait implementations for structs/enums:
@@ -93,9 +95,10 @@ interface ItemDocs {
     methods: MethodInfo[]
   }[]
 }
-```
+````
 
 **Files to modify**:
+
 - `src/mastra/lib/parsers-turndown.ts`: Parse implementation blocks
 - Tool schemas: Add implementations field
 
@@ -106,6 +109,7 @@ interface ItemDocs {
 ## 📊 MEDIUM PRIORITY FEATURES
 
 ### 4. Feature Flags Parsing
+
 **Status**: Not started  
 **Priority**: Medium  
 **Estimated effort**: Small
@@ -113,11 +117,13 @@ interface ItemDocs {
 Complete feature flags extraction in parsers.
 
 **Files to modify**:
+
 - `src/mastra/lib/parsers-turndown.ts`: Complete getCrateFeatures()
 
 ---
 
 ### 5. Rate Limiting for crates.io
+
 **Status**: Not started  
 **Priority**: Medium  
 **Estimated effort**: Small
@@ -125,6 +131,7 @@ Complete feature flags extraction in parsers.
 Add rate limit handling for crates.io API.
 
 **Files to modify**:
+
 - `src/mastra/lib/crates-io.ts`: Add retry logic and rate limit detection
 
 ---
@@ -132,6 +139,7 @@ Add rate limit handling for crates.io API.
 ## 🔧 LOW PRIORITY IMPROVEMENTS
 
 ### 6. Cache Persistence
+
 **Status**: Not started  
 **Priority**: Low  
 **Estimated effort**: Medium
@@ -141,6 +149,7 @@ Move from in-memory to persistent cache (Redis/file system).
 ---
 
 ### 7. Versioned Documentation
+
 **Status**: Not started  
 **Priority**: Low  
 **Estimated effort**: Small
@@ -152,9 +161,11 @@ Support fetching docs for specific Rust versions (currently always latest).
 ## ✅ RECENTLY COMPLETED (Dec 6, 2024)
 
 ### Resources - REMOVED (Dec 6, 2024)
+
 **Status**: ✅ Removed
 
 The earlier static resource bundle that contained curated Rust patterns was removed to maintain a dynamic-first approach. Hardcoded resources were replaced with:
+
 - Updated prompts guiding workflows and tool usage for dynamic retrieval (get_item_docs, get_crate_overview, list_modules)
 - Emphasis on using the docs.rs-driven tools to ensure always up-to-date docs
 
@@ -164,10 +175,12 @@ The earlier static resource bundle that contained curated Rust patterns was remo
 
 ---
 
-### MCP Prompts Implementation  
+### MCP Prompts Implementation
+
 **Status**: ✅ Complete
 
 Created `src/mastra/prompts/rust-prompts.ts` with 6 task templates:
+
 - implement-trait: Guide for implementing traits
 - add-async-support: Convert sync to async
 - handle-errors-idiomatically: Add error handling
@@ -176,6 +189,7 @@ Created `src/mastra/prompts/rust-prompts.ts` with 6 task templates:
 - optimize-for-performance: Performance optimization
 
 Each prompt includes:
+
 - Argument schema
 - Contextualized message templates
 - Task-specific guidance
@@ -185,6 +199,7 @@ Each prompt includes:
 ---
 
 ### Documentation Consolidation
+
 **Status**: ✅ Complete
 
 - Moved all analysis from ANALYSIS_SUMMARY.md into analysis.md
@@ -195,6 +210,7 @@ Each prompt includes:
 ---
 
 ### Build Verification
+
 **Status**: ✅ Complete
 
 - Ran `bun run build` successfully
@@ -229,7 +245,7 @@ When implementing enhancements, test with:
    - [x] Verify markdown formatting
 
 5. **MCP Prompts** ✅
-   - [x] List prompts via MCP client  
+   - [x] List prompts via MCP client
    - [x] Get prompt with arguments
    - [x] Verify message templates
 
@@ -240,7 +256,7 @@ When implementing enhancements, test with:
 **Immediate next steps** (in priority order):
 
 1. **Extract Code Examples** - Highest value, moderate effort
-2. **Better Error Messages** - High value, low effort  
+2. **Better Error Messages** - High value, low effort
 3. **Test Resources & Prompts** - Verify new features work in MCP client
 4. **Trait Implementations** - Medium value, medium effort
 5. **Feature Flags** - Low value, low effort
@@ -257,19 +273,20 @@ When implementing enhancements, test with:
 
 ---
 
-*Last updated: Dec 6, 2024*
-  
+_Last updated: Dec 6, 2024_
+
 - [ ] **Improve Error Messages**
   - [ ] When item not found, suggest using `list_modules`
   - [ ] Parse 404 pages to suggest likely module paths
   - [ ] Add helpful context to all error messages
 
--- [ ] **Add MCP Resources** (Common Rust Patterns) — *DEPRECATED*
-   The team removed hardcoded resources. If a curated resource set is still desired, implement it behind a feature flag so it can be switched off.
-  - [ ] Resource: Async patterns (spawn, select, join)
-  - [ ] Resource: Error handling (Result, ?, thiserror)
-  - [ ] Resource: Ownership patterns (Rc, Arc, RefCell)
-  - [ ] Resource: Common trait bounds (Send, Sync, 'static)
+-- [ ] **Add MCP Resources** (Common Rust Patterns) — _DEPRECATED_
+The team removed hardcoded resources. If a curated resource set is still desired, implement it behind a feature flag so it can be switched off.
+
+- [ ] Resource: Async patterns (spawn, select, join)
+- [ ] Resource: Error handling (Result, ?, thiserror)
+- [ ] Resource: Ownership patterns (Rc, Arc, RefCell)
+- [ ] Resource: Common trait bounds (Send, Sync, 'static)
 
 ### Medium Priority - Do Soon 📅
 

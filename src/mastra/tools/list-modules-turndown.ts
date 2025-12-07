@@ -38,7 +38,10 @@ export const listModulesToolTurndown = createTool({
     const cacheKey = `module-items-markdown:${crate}:${version}:${module || "root"}`;
 
     try {
-      const ttl = version === "latest" ? CACHE_TTL.MODULE_LISTING_LATEST : CACHE_TTL.MODULE_LISTING;
+      const ttl =
+        version === "latest"
+          ? CACHE_TTL.MODULE_LISTING_LATEST
+          : CACHE_TTL.MODULE_LISTING;
       return await getCached(cacheKey, ttl, async () => {
         // Crate path uses underscores instead of hyphens
         const cratePath = crate.replace(/-/g, "_");
