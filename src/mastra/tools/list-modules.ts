@@ -14,6 +14,11 @@ export const listModulesTool = createTool({
     "List all modules and items in a Rust crate or specific module from docs.rs. Returns categorized lists of submodules, structs, enums, traits, functions, macros, type aliases, and constants.",
   inputSchema: z.object({
     crate: z.string().describe("Crate name (e.g., 'tauri', 'serde', 'tokio')"),
+    version: z
+      .string()
+      .optional()
+      .default("latest")
+      .describe("Crate version (default: 'latest')"),
     module: z
       .string()
       .optional()
@@ -33,15 +38,16 @@ export const listModulesTool = createTool({
     url: z.string(),
   }),
   execute: async ({ context }) => {
-    const { crate, module } = context;
-    const cacheKey = `module-items:${crate}:${module || "root"}`;
+    const { crate, version, module } = context;
+    const cacheKey = `module-items:${crate}:${version}:${module || "root"}`;
 
     try {
-      return await getCached(cacheKey, CACHE_TTL.MODULE_LISTING, async () => {
+      const ttl = version === "latest" ? CACHE_TTL.MODULE_LISTING_LATEST : CACHE_TTL.MODULE_LISTING;
+      return await getCached(cacheKey, ttl, async () => {
         // Crate path uses underscores instead of hyphens
         const cratePath = crate.replace(/-/g, "_");
         const modulePath = module ? `${module.replace(/-/g, "_")}/` : "";
-        const url = `https://docs.rs/${crate}/latest/${cratePath}/${modulePath}`;
+        const url = `https://docs.rs/${crate}/${version}/${cratePath}/${modulePath}`;
 
         const response = await fetch(url, {
           headers: {

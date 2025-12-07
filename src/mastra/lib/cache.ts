@@ -21,8 +21,11 @@ const cache = new Map<string, CacheEntry<unknown>>();
 export const CACHE_TTL = {
   CRATE_SEARCH: 30 * 60 * 1000, // 30 minutes - new crates published
   CRATE_OVERVIEW: 24 * 60 * 60 * 1000, // 24 hours - versioned docs are immutable
-  ITEM_DOCS: 24 * 60 * 60 * 1000, // 24 hours - versioned docs are immutable
-  MODULE_LISTING: 24 * 60 * 60 * 1000, // 24 hours - versioned docs are immutable
+  CRATE_OVERVIEW_LATEST: 2 * 60 * 60 * 1000, // 2 hours - 'latest' can change on new releases
+  ITEM_DOCS: 24 * 60 * 60 * 1000, // 24 hours - versioned item docs are immutable
+  ITEM_DOCS_LATEST: 2 * 60 * 60 * 1000, // 2 hours - latest item docs
+  MODULE_LISTING: 24 * 60 * 60 * 1000, // 24 hours - versioned module listings
+  MODULE_LISTING_LATEST: 2 * 60 * 60 * 1000, // 2 hours - latest module listing TTL
 } as const;
 
 /**

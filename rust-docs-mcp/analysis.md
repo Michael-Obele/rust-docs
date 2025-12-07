@@ -10,6 +10,21 @@ The Rust Docs MCP server is **functionally complete** for basic documentation ac
 
 ---
 
+## Implementation Update (Dec 6, 2024)
+
+We made several important changes after the initial implementation:
+
+- **Removed hardcoded MCP Resources**: The earlier implementation included a static set of Rust pattern resources. These were removed to maintain an entirely dynamic, docs.rs-first approach. Hardcoding patterns would become outdated and defeat the purpose of real-time documentation access.
+- **Prompts improved**: All prompts were updated to explicitly guide AI to use the MCP tools (`get_item_docs`, `get_crate_overview`, `list_modules`) and accept an optional `version` argument. This ensures AI queries live docs rather than relying on training data.
+- **Cache strategy updated**: Cache TTLs were adjusted to make versioned doc caches long-lived (24 hours) while keeping `latest` caches shorter (2 hours), and search caches short (30 minutes) to balance freshness and performance.
+- **Dynamic-first philosophy**: The MCP now favors dynamic, tool-driven documentation lookups over static content. This reduces maintenance and ensures the MCP always returns up-to-date information.
+
+These updates were implemented to address the main concern: the MCP should bridge the gap between model training data and up-to-date web documentation, not replicate or hardcode knowledge.
+
+---
+
+---
+
 ## Testing Results
 
 ### ✅ Tool Verification (All Passing)
@@ -113,29 +128,22 @@ Based on research of MCP best practices and Rust development patterns:
 **Current:** "Item not found"
 **Should Be:** "Item 'spawn' not found at root. Try: tokio::task::spawn"
 
-#### 4. MCP Resources - Common Patterns
+#### 4. MCP Resources - Common Patterns (DEPRECATED)
 
-**Why:** Teach Rust patterns, not just docs
-**Should Include:**
+**Why:** Teach Rust patterns, not just docs — *but don't hardcode them.*
+**Current approach:** Static MCP Resources were removed and replaced by a dynamic-first approach using tools + prompts. If desired, resource templates (dynamic URI templates) can still be exposed as an optional, feature-gated interface.
 
-- Async patterns (spawn, select, join)
-- Error handling (Result, ?, thiserror)
-- Ownership patterns (Rc, Arc, RefCell)
-- Common trait bounds (Send, Sync, 'static)
+**Dynamic-first recommendation:**
+- Use `get_item_docs`, `get_crate_overview`, and `list_modules` to fetch patterns/examples directly from docs.rs
+- Prompts should orchestrate tool usage and provide step-by-step workflows for developers and agents
 
-**Example Resource:**
-
+**If resources are required in the future (optional)**:
 ```typescript
 {
-  uri: "rust://patterns/async/spawning-tasks",
-  name: "Spawning Background Tasks",
-  description: "Pattern for spawning concurrent tasks",
-  content: {
-    pattern: "...",
-    whenToUse: "...",
-    commonMistakes: "...",
-    examples: [...]
-  }
+   uri: "rust://patterns/async/spawning-tasks",
+   name: "Spawning Background Tasks",
+   description: "Pattern for spawning concurrent tasks",
+   content: { pattern: "...", whenToUse: "...", commonMistakes: "...", examples: [...] }
 }
 ```
 

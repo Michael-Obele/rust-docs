@@ -28,6 +28,11 @@ export const rustPrompts: Prompt[] = [
         description: "Crate containing the trait (e.g., 'std', 'serde')",
         required: false,
       },
+      {
+        name: "version",
+        description: "Optional crate version to use when querying documentation (default: 'latest')",
+        required: false,
+      },
     ],
   },
   {
@@ -42,6 +47,11 @@ export const rustPrompts: Prompt[] = [
       {
         name: "runtime",
         description: "Async runtime to use (tokio, async-std)",
+        required: false,
+      },
+      {
+        name: "version",
+        description: "Optional crate/runtime version to use when querying documentation (default: 'latest')",
         required: false,
       },
     ],
@@ -60,6 +70,11 @@ export const rustPrompts: Prompt[] = [
         description: "Error handling strategy (Result, thiserror, anyhow)",
         required: false,
       },
+      {
+        name: "version",
+        description: "Optional crate version to use for documentation queries (default: 'latest')",
+        required: false,
+      },
     ],
   },
   {
@@ -74,6 +89,11 @@ export const rustPrompts: Prompt[] = [
       {
         name: "use_case",
         description: "Use case (threading, async, both)",
+        required: false,
+      },
+      {
+        name: "version",
+        description: "Optional crate version if documentation should be a specific version",
         required: false,
       },
     ],
@@ -92,6 +112,11 @@ export const rustPrompts: Prompt[] = [
         description: "Code with lifetime issues",
         required: false,
       },
+      {
+        name: "version",
+        description: "Optional crate version for documentation lookups useful during debugging",
+        required: false,
+      },
     ],
   },
   {
@@ -106,6 +131,11 @@ export const rustPrompts: Prompt[] = [
       {
         name: "bottleneck",
         description: "Known performance bottleneck",
+        required: false,
+      },
+      {
+        name: "version",
+        description: "Optional crate version used when consulting docs for performance patterns",
         required: false,
       },
     ],
@@ -132,6 +162,7 @@ export async function getRustPromptMessages({
       const traitName = args?.trait_name || "Trait";
       const typeName = args?.type_name || "MyType";
       const crateName = args?.crate_name || "the documentation";
+      const version = args?.version || "latest";
 
       return {
         prompt,
@@ -147,8 +178,9 @@ export async function getRustPromptMessages({
 Follow this workflow:
 
 1. **Query the documentation** (REQUIRED):
-   - Use the 'get_item_docs' tool to fetch ${traitName} trait documentation from ${crateName}
-   - Parameters: { crate: "${crateName}", item_type: "trait", item_name: "${traitName}" }
+  - Use the 'get_item_docs' tool to fetch ${traitName} trait documentation from ${crateName}
+  - If the item isn't found at the crate root, use the 'list_modules' tool to locate the module that contains it and re-call 'get_item_docs' with the correct module path
+  - Parameters: { crate: "${crateName}", version: "${version}", item_type: "trait", item_name: "${traitName}" }
    - This gives you: required methods, trait bounds, and current API
 
 2. **Analyze what you found**:
@@ -177,6 +209,7 @@ Follow this workflow:
     case "add-async-support": {
       const code = args?.function_code || "fn example() {}";
       const runtime = args?.runtime || "tokio";
+      const version = args?.version || "latest";
 
       return {
         prompt,
@@ -196,8 +229,9 @@ ${code}
 Workflow:
 
 1. **Query ${runtime} documentation**:
-   - Use 'get_crate_overview' for ${runtime} to understand async patterns
-   - Use 'get_item_docs' for specific types you need (e.g., tokio::task::spawn)
+  - Use 'get_crate_overview' for ${runtime} (version: ${version}) to understand async patterns
+  - If a helpful item isn't found, use 'list_modules' for the crate to locate the module path and fetch the item docs for types/functions used in the code
+  - Use 'get_item_docs' for specific types you need (e.g., tokio::task::spawn) with version ${version}
    - Get up-to-date API information, don't rely on training data
 
 2. **Analyze the code**:
@@ -225,6 +259,7 @@ Workflow:
     case "handle-errors-idiomatically": {
       const code = args?.code || "";
       const strategy = args?.error_strategy || "Result and ?";
+      const version = args?.version || "latest";
 
       return {
         prompt,
@@ -244,8 +279,9 @@ ${code}
 Workflow:
 
 1. **Query documentation** (if using thiserror/anyhow):
-   - Use 'get_crate_overview' for the error handling crate
-   - Use 'get_item_docs' for specific error types/macros
+  - Use 'get_crate_overview' for the error handling crate (version: ${version})
+  - If specific types/macros aren't found, use 'list_modules' to find their module path, then fetch the item docs
+  - Use 'get_item_docs' for specific error types/macros with version ${version}
    - Get current best practices from docs
 
 2. **Analyze the code**:
@@ -272,6 +308,7 @@ Workflow:
     case "add-send-sync-bounds": {
       const code = args?.code || "";
       const useCase = args?.use_case || "async tasks";
+      const version = args?.version || "latest";
 
       return {
         prompt,
@@ -291,8 +328,9 @@ ${code}
 Workflow:
 
 1. **Query documentation**:
-   - Use 'get_item_docs' for std::marker::Send trait
-   - Use 'get_item_docs' for std::marker::Sync trait
+  - Use 'get_item_docs' for std::marker::Send trait (version: ${version})
+  - If any type is missing, call 'list_modules' for the crate to find its actual module
+  - Use 'get_item_docs' for std::marker::Sync trait (version: ${version})
    - Understand what types implement these traits
 
 2. **Analyze the code**:
@@ -319,6 +357,7 @@ Workflow:
     case "fix-lifetime-errors": {
       const errorMessage = args?.error_message || "";
       const code = args?.code || "";
+      const version = args?.version || "latest";
 
       return {
         prompt,
@@ -341,7 +380,7 @@ ${code ? `**Code:**\n\`\`\`rust\n${code}\n\`\`\`\n` : ""}
 Workflow:
 
 1. **Query docs if needed**:
-   - If error mentions a specific type/trait, use 'get_item_docs' to understand it
+  - If error mentions a specific type/trait, use 'get_item_docs' to understand it (use version ${version} if applicable). If not found, run 'list_modules' to find correct module path
    - Check lifetime requirements in the type's documentation
    - Get current API information
 
@@ -369,6 +408,7 @@ Workflow:
     case "optimize-for-performance": {
       const code = args?.code || "";
       const bottleneck = args?.bottleneck || "";
+      const version = args?.version || "latest";
 
       return {
         prompt,
@@ -390,8 +430,9 @@ ${bottleneck ? `Known bottleneck: ${bottleneck}\n` : ""}
 Workflow:
 
 1. **Query relevant docs**:
-   - If using collections, query std::collections docs for performance characteristics
-   - If using async, query runtime docs for performance tips
+  - If using collections, query std::collections docs for performance characteristics (use version: ${version} if applicable)
+  - If a particular type is not found, use 'list_modules' to find it within the crate and re-query
+  - If using async, query runtime docs for performance tips (use version: ${version} if applicable)
    - Check documentation for performance notes on types used
 
 2. **Identify issues**:

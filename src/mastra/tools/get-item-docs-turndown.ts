@@ -14,6 +14,11 @@ export const getItemDocsToolTurndown = createTool({
     "Get documentation for a specific Rust item (struct, enum, trait, function, macro, or type alias) from docs.rs as Markdown. Returns the full item documentation converted to readable Markdown format.",
   inputSchema: z.object({
     crate: z.string().describe("Crate name (e.g., 'tauri', 'serde', 'tokio')"),
+    version: z
+      .string()
+      .optional()
+      .default("latest")
+      .describe("Crate version (default: 'latest')"),
     item_type: z
       .enum(["struct", "enum", "trait", "fn", "macro", "type"])
       .describe(
@@ -36,15 +41,16 @@ export const getItemDocsToolTurndown = createTool({
     url: z.string(),
   }),
   execute: async ({ context }) => {
-    const { crate, item_type, item_name, module } = context;
-    const cacheKey = `item-docs-markdown:${crate}:${module || ""}:${item_type}:${item_name}`;
+    const { crate, version, item_type, item_name, module } = context;
+    const cacheKey = `item-docs-markdown:${crate}:${version}:${module || ""}:${item_type}:${item_name}`;
 
     try {
-      return await getCached(cacheKey, CACHE_TTL.ITEM_DOCS, async () => {
+      const ttl = version === "latest" ? CACHE_TTL.ITEM_DOCS_LATEST : CACHE_TTL.ITEM_DOCS;
+      return await getCached(cacheKey, ttl, async () => {
         // Crate path uses underscores instead of hyphens
         const cratePath = crate.replace(/-/g, "_");
         const modulePath = module ? `${module}/` : "";
-        const url = `https://docs.rs/${crate}/latest/${cratePath}/${modulePath}${item_type}.${item_name}.html`;
+        const url = `https://docs.rs/${crate}/${version}/${cratePath}/${modulePath}${item_type}.${item_name}.html`;
 
         const response = await fetch(url, {
           headers: {
@@ -61,7 +67,9 @@ export const getItemDocsToolTurndown = createTool({
         const html = await response.text();
 
         if (isNotFoundPage(html)) {
-          throw new Error(`Item '${item_name}' not found in crate '${crate}'`);
+          // Include helpful debugging guidance
+          const suggestion = `If this item exists, try using 'list_modules' tool to find its module path and re-call get_item_docs with module parameter`;
+          throw new Error(`Item '${item_name}' not found in crate '${crate}'. ${suggestion}`);
         }
 
         return parseItemDocsMarkdown(html, {

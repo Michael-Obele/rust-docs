@@ -151,21 +151,16 @@ Support fetching docs for specific Rust versions (currently always latest).
 
 ## ✅ RECENTLY COMPLETED (Dec 6, 2024)
 
-### MCP Resources Implementation
-**Status**: ✅ Complete
+### Resources - REMOVED (Dec 6, 2024)
+**Status**: ✅ Removed
 
-Created `src/mastra/resources/rust-patterns.ts` with 9 curated Rust patterns:
-- Async patterns (spawning tasks, select/join)
-- Error handling (Result, ?, custom errors)
-- Ownership patterns (Rc/Arc, RefCell/Mutex)  
-- Trait bounds (Send/Sync, 'static)
+The earlier static resource bundle that contained curated Rust patterns was removed to maintain a dynamic-first approach. Hardcoded resources were replaced with:
+- Updated prompts guiding workflows and tool usage for dynamic retrieval (get_item_docs, get_crate_overview, list_modules)
+- Emphasis on using the docs.rs-driven tools to ensure always up-to-date docs
 
-Each resource includes:
-- Code examples
-- Common mistakes
-- Best practices
+**Rationale**: Static resources can become outdated; dynamic tool-driven retrieval ensures the MCP always provides current documentation.
 
-**Integration**: Wired into MCPServer in `src/mastra/index.ts`
+**Note**: If you want to keep curated patterns for offline scenarios, consider adding them as optional resource templates behind a feature flag. Currently the MCP prioritizes live docs.
 
 ---
 
@@ -269,7 +264,8 @@ When implementing enhancements, test with:
   - [ ] Parse 404 pages to suggest likely module paths
   - [ ] Add helpful context to all error messages
 
-- [ ] **Add MCP Resources** (Common Rust Patterns)
+-- [ ] **Add MCP Resources** (Common Rust Patterns) — *DEPRECATED*
+   The team removed hardcoded resources. If a curated resource set is still desired, implement it behind a feature flag so it can be switched off.
   - [ ] Resource: Async patterns (spawn, select, join)
   - [ ] Resource: Error handling (Result, ?, thiserror)
   - [ ] Resource: Ownership patterns (Rc, Arc, RefCell)

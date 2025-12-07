@@ -42,7 +42,8 @@ export const getCrateOverviewTool = createTool({
     const cacheKey = `crate-overview:${crate}:${version}`;
 
     try {
-      return await getCached(cacheKey, CACHE_TTL.CRATE_OVERVIEW, async () => {
+      const ttl = version === "latest" ? CACHE_TTL.CRATE_OVERVIEW_LATEST : CACHE_TTL.CRATE_OVERVIEW;
+      return await getCached(cacheKey, ttl, async () => {
         // Crate path uses underscores instead of hyphens
         const cratePath = crate.replace(/-/g, "_");
         const url = `https://docs.rs/${crate}/${version}/${cratePath}/`;
