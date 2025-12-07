@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@mastra/core": "^0.24.6",
+    "@mastra/libsql": "^0.16.3",
     "@mastra/loggers": "^0.10.19",
     "@mastra/mcp": "latest",
     "@types/node": "^24.10.1",
