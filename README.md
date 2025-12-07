@@ -109,6 +109,46 @@ npm run dev
 - `npm run dev` - Start Mastra in development mode (recommended smoke-test).
 - `npm run build` - Build the Mastra project for production.
 - `npm run start` - Start the built Mastra server.
+- `npm run check-versions` - Check if package.json and MCP server versions match.
+- `npm run sync-versions-auto` - Auto-sync versions if they don't match (package.json is source of truth).
+- `npm run sync-versions` - Sync versions from latest git tag to both files.
+
+## Release Process
+
+This project uses [semantic-release](https://github.com/semantic-release/semantic-release) for automated versioning and changelog generation based on conventional commits.
+
+### How it works
+
+1. **Conventional Commits**: All commits must follow the [conventional commit format](https://conventionalcommits.org/)
+   - `feat:` for new features (minor version bump)
+   - `fix:` for bug fixes (patch version bump)
+   - `docs:`, `chore:`, `refactor:`, `style:`, `test:` for other changes (no version bump)
+
+2. **Automated Releases**: When code is pushed to the `main` branch, semantic-release:
+   - Analyzes commit messages
+   - Determines the next version number
+   - Updates `package.json` and `src/mastra/index.ts` with the new version
+   - Generates/updates `CHANGELOG.md`
+   - Creates a git tag and GitHub release
+
+3. **Version Synchronization**: The version is maintained in two places:
+   - `package.json` (source of truth)
+   - `src/mastra/index.ts` (MCP server version)
+
+### Manual Version Management
+
+If you need to manually sync versions:
+
+```bash
+# Check if versions match
+npm run check-versions
+
+# Auto-sync versions (package.json is source of truth)
+npm run sync-versions-auto
+
+# Sync from latest git tag
+npm run sync-versions
+```
 
 ## MCP Architecture
 
@@ -169,3 +209,5 @@ We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING
 For more details:
 
 - **Web scraping services**: See `src/mastra/lib/` for documentation fetching and parsing implementation
+
+
